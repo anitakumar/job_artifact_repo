@@ -9,6 +9,14 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v6
+        with:
+          # in needs to be path on th runner machine
+          path: ~/.npm
+          key: deps-node-modules-${{ hasfiles('**/package-lock.json') }}
+      #if the dependecy does not exist it will use cache
+      # will rerun if the package-lock.json will change as thsi contain the differnet depenedies in it
       - name: Install dependencies
         run: npm ci
       - name: Lint code
@@ -23,6 +31,12 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v6
+        with:
+          # in needs to be path on th runner machine
+          path: ~/.npm
+          key: deps-node-modules-${{ hasfiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
       - name: Build website
